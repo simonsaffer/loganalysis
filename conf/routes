@@ -1,0 +1,24 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET     /                          controllers.Application.index
+GET     /assets/*file              controllers.Assets.at(path="/public", file)
+
+# upload log for analysis
+POST    /logs/*file                controllers.LogController.upload(file)
+
+# List of all unique users.
+GET     /users/:logId              controllers.UserController.uniqueUsers(logId: Int)
+# List of n top users and the number of distinct songs played by each of them, sorted in decreasing order by the number of
+#distinct songs (i.e., the user with the highest number of distinct songs listened appearing at the top of the list).
+GET     /users/:logId/top          controllers.UserController.topUsers(logId: Int, n: Option[Int])
+# List of n top most frequently listened songs and the number of times each of them was played,
+#sorted in decreasing order by the number of times a song was played.
+GET     /songs/:logId              controllers.SongController.mostFrequent(logId: Int, n: Option[Int])
+# List of n top longest listening sessions, with information on their duration, the user, and the songs listened, sorted decreasingly by session length.
+GET     /sessions/:logId           controllers.SessionController.longestSessions(logId: Int, n: Option[Int])
+
+# Given a user ID, predict the next time the user will be listening to any content.)
+# Given a user ID, predict the next song(s) the user will be listening to.
+# Given a user ID, recommend songs (or artists) that the user has not listened to yet, but might want to.
