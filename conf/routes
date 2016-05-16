@@ -17,7 +17,7 @@ GET     /users/:logId/top          controllers.UserController.topUsers(logId: In
 #sorted in decreasing order by the number of times a song was played.
 GET     /songs/:logId              controllers.SongController.mostFrequent(logId: Int, n: Option[Int])
 # List of n top longest listening sessions, with information on their duration, the user, and the songs listened, sorted decreasingly by session length.
-GET     /sessions/:logId           controllers.SessionController.longestSessions(logId: Int, n: Option[Int])
+GET     /sessions/:logId/top       controllers.SessionController.longestSessions(logId: Int, n: Option[Int])
 
 # Given a user ID, predict the next time the user will be listening to any content.)
 # Given a user ID, predict the next song(s) the user will be listening to.

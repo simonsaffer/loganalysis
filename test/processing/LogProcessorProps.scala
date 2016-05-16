@@ -25,13 +25,13 @@ class LogProcessorProps extends Properties("LogProcessor") {
   property("splitIntoSessions shouldn't loose songs") =
     Prop.forAll(Gen.listOf(songLongTupleGen(Gen.chooseNum(0L, Int.MaxValue.toLong))))
     { (input: Seq[(Song, Long)]) =>
-      LogProcessor.splitIntoSessions(input).map(_.size).sum == input.size
+      LogProcessor.splitIntoSessions(input.iterator).map(_.size).sum == input.size
     }
 
   property("splitIntoSessions should create only one Seq if all are less than 20 minutes apart ") =
     Prop.forAll(Gen.listOf(songLongTupleGen(Gen.chooseNum(0L, 19*60L))))
     { (input: Seq[(Song, Long)]) =>
-      LogProcessor.splitIntoSessions(input).size == 1
+      LogProcessor.splitIntoSessions(input.iterator).size == 1
     }
 
   val zoneDateTimeGen: Gen[ZonedDateTime] = for {

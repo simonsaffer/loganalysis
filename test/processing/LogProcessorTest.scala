@@ -12,12 +12,12 @@ class LogProcessorTest extends Specification {
     val dummy = Song(Some(""), "", Some(""), "")
 
     "If ALL songs are within 20 minutes of eachother, they should all be in one single session" >> {
-      val allInOneSession: Seq[(Song, Long)] = Seq((dummy, 0L), (dummy, 20*60L), (dummy, 40*60L))
-      LogProcessor.splitIntoSessions(allInOneSession) must be equalTo(Seq(allInOneSession))
+      val allInOneSession: Iterator[(Song, Long)] = Seq((dummy, 0L), (dummy, 20*60L), (dummy, 40*60L)).iterator
+      LogProcessor.splitIntoSessions(allInOneSession) must be equalTo(Seq(Seq((dummy, 0L), (dummy, 20*60L), (dummy, 40*60L))))
     }
 
     "If NO songs are within 20 minutes of eachother, they should all be in separate sessions" >> {
-      val allInDifferentSessions: Seq[(Song, Long)] = Seq((dummy, 0L), (dummy, 21*60L), (dummy, 42*60L))
+      val allInDifferentSessions: Iterator[(Song, Long)] = Seq((dummy, 0L), (dummy, 21*60L), (dummy, 42*60L)).iterator
       LogProcessor.splitIntoSessions(allInDifferentSessions) must be equalTo(
           Seq(Seq((dummy, 0L)), ListBuffer((dummy, 21*60L)), ListBuffer((dummy, 42*60L)))
         )
@@ -31,7 +31,7 @@ class LogProcessorTest extends Specification {
           (dummy, 64*60L),
           (dummy, 85*60L), (dummy, 86*60L)
         )
-      LogProcessor.splitIntoSessions(mix) must be equalTo(
+      LogProcessor.splitIntoSessions(mix.iterator) must be equalTo(
         Seq(
           Seq((dummy, 0L)),
           Seq((dummy, 21*60L), (dummy, 41*60L), (dummy, 42*60L), (dummy, 43*60L)),
@@ -43,7 +43,7 @@ class LogProcessorTest extends Specification {
           (dummy, 0L),
           (dummy, 21*60L), (dummy, 41*60L), (dummy, 42*60L), (dummy, 43*60L)
         )
-      LogProcessor.splitIntoSessions(firstSongAlone) must be equalTo(
+      LogProcessor.splitIntoSessions(firstSongAlone.iterator) must be equalTo(
         Seq(
           Seq((dummy, 0L)),
           Seq((dummy, 21*60L), (dummy, 41*60L), (dummy, 42*60L), (dummy, 43*60L)))
@@ -53,7 +53,7 @@ class LogProcessorTest extends Specification {
           (dummy, 21*60L), (dummy, 41*60L), (dummy, 42*60L), (dummy, 43*60L),
           (dummy, 64*60L)
         )
-      LogProcessor.splitIntoSessions(lastSongAlone) must be equalTo(
+      LogProcessor.splitIntoSessions(lastSongAlone.iterator) must be equalTo(
         Seq(
           Seq((dummy, 21*60L), (dummy, 41*60L), (dummy, 42*60L), (dummy, 43*60L)),
           Seq((dummy, 64*60L)))

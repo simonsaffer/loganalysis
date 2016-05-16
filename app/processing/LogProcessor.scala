@@ -78,16 +78,6 @@ class LogProcessor extends Serializable {
     // Given a user ID, predict the next time the user will be listening to any content.)
     // Given a user ID, predict the next song(s) the user will be listening to.
     // Given a user ID, recommend songs (or artists) that the user has not listened to yet, but might want to.
-
-    /*LogResults.addResult(
-      logId,
-      LogResults(
-        uniqueUsers.collect(),
-        usersSortedByNumberOfSongsPlayed,
-        songFrequency.collect().sortBy(_._2),
-        sessionsSortedByDuration
-      )
-    )*/
   }
 
 }
@@ -130,10 +120,10 @@ object LogProcessor {
       val nextSongAndTimestamp: (Song, Long) = remainingSongsAndDates.next()
       if (currentSession.isEmpty || minutesBetween(currentSession.last._2, nextSongAndTimestamp._2) <= 20) {
         currentSession += nextSongAndTimestamp
-        doSplit(currentSession, remainingSongsAndDates drop 1, result)
+        doSplit(currentSession, remainingSongsAndDates, result)
       } else {
         result += currentSession
-        doSplit(ListBuffer[(Song, Long)](nextSongAndTimestamp), remainingSongsAndDates drop 1, result)
+        doSplit(ListBuffer[(Song, Long)](nextSongAndTimestamp), remainingSongsAndDates, result)
       }
     }
   }
